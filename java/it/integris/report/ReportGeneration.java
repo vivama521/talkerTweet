@@ -35,7 +35,7 @@ public class ReportGeneration
 	public static void main( String[] args )
 	{
 
-		//***		File propertiesFiles = new File(args[0]);
+		//****		File propertiesFiles = new File(args[0]);
 		File propertiesFiles = new File("src/test/resources/application.properties");
 
 		//***path provvisorio per far partire l'applicazione
