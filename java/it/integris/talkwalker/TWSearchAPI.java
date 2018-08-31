@@ -280,23 +280,25 @@ public class TWSearchAPI {
 					JSONArray listDocuments = responseJSON.getJSONArray("data");
 					HashMap<Long, JSONObject> twitterDocumentsToEnrich = new HashMap<>();
 					boolean pagination = true;
-					//					int z = 0;
+					String currentDocUrl="";
+					String url="";
+					JSONObject currentDoc = null;
 					while(pagination){
 						for(int i = 0; i < listDocuments.length(); i++){
-							JSONObject currentDoc = listDocuments.getJSONObject(i).getJSONObject("data");
-
-							String url="";
-
+							currentDoc=listDocuments.getJSONObject(i).getJSONObject("data");
+							//metto il contenuto dell' url presente nella variabile currentDoc JSON in una variabile String
+							currentDocUrl=currentDoc.getString("url");
+							
 							try {
 								if(currentDoc.getString("external_id")!=null)
 									url="https://twitter.com/statuses/"+currentDoc.getString("external_id");
 							} catch(JSONException e){
-								LOGGER.error("An error occurred during set external_id..external_id not found");
+								LOGGER.error("The JSONObject currentDoc dosen't contains the external_id...");
 							}
 
 							totalDocsPerTopic.add(currentDoc);
-							if(!ReportGeneration.retrievedDocuments.containsKey(currentDoc.getString("url"))){
-								//System.out.println("Parsing document url = " + currentDoc.getString("url"));
+							if(!ReportGeneration.retrievedDocuments.containsKey(currentDocUrl)){
+								//System.out.println("Parsing document url = " + currentDocUrl);
 								JSONArray sources = currentDoc.getJSONArray("source_type");
 								int j = 0;
 								boolean found = false;
@@ -305,8 +307,8 @@ public class TWSearchAPI {
 									j++;
 								}
 
-								if(found && !url.equals("")){ 
-									//	String url = currentDoc.getString("url");
+								if(found){ 
+
 									twitterDocumentsToEnrich.put(Long.parseLong(url.substring(url.lastIndexOf('/') + 1, url.length())), currentDoc);
 									if(twitterDocumentsToEnrich.size() == 10){
 										// Enrich retrieved Twitter documents
@@ -322,10 +324,10 @@ public class TWSearchAPI {
 										twitterDocumentsToEnrich = new HashMap<>();
 									}
 								} else {
-									ReportGeneration.retrievedDocuments.put(currentDoc.getString("url"), currentDoc);
+									ReportGeneration.retrievedDocuments.put(currentDocUrl, currentDoc);
 								}
 							} else {
-								JSONObject existingDoc = ReportGeneration.retrievedDocuments.get(currentDoc.getString("url"));
+								JSONObject existingDoc = ReportGeneration.retrievedDocuments.get(currentDocUrl);
 								// Manage multiple topics and tags for the same doc
 								TWJSONParser.managePossibleMultipleTopicsAndTagsOnSameDocument(existingDoc, currentDoc);
 

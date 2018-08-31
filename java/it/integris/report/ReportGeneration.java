@@ -39,7 +39,7 @@ public class ReportGeneration
 		File propertiesFiles = new File("src/test/resources/application.properties");
 
 		//****path provvisorio per far partire l'applicazione
-		String provvisoryFilename="/home/sviluppo/Documenti/progetti Java/workspaceEclipse/TalkWalkerReport/src/test/resources/";
+		String provvisoryFilename="/home/sviluppo/Documenti/progetti Java/workspaceEclipse/talkerTweet/test/resources/";
 		Path provvisoryPathToFile = Paths.get(provvisoryFilename);
 		
 
