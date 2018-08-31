@@ -280,24 +280,27 @@ public class TWSearchAPI {
 					JSONArray listDocuments = responseJSON.getJSONArray("data");
 					HashMap<Long, JSONObject> twitterDocumentsToEnrich = new HashMap<>();
 					boolean pagination = true;
-					String currentDocUrl="";
+					//String currentDocUrl="";
 					String url="";
 					JSONObject currentDoc = null;
 					while(pagination){
 						for(int i = 0; i < listDocuments.length(); i++){
 							currentDoc=listDocuments.getJSONObject(i).getJSONObject("data");
-							//metto il contenuto dell' url presente nella variabile currentDoc JSON in una variabile String
-							currentDocUrl=currentDoc.getString("url");
+							//********** INTERVENTO PER AGGIORNAMENTO POLICY TWITTER DEL 3/09/2018***********//
 							
+							//metto il contenuto dell' url presente nell'oggetto currentDoc JSON in una variabile String
+							//currentDocUrl=currentDoc.getString("url"); 
+							//sostituito url al currentDocUrl che dal 3/09 dovrebbe essere vuoto
+							//se è presente un external_id costruisco l'url altrimenti no, se non ce l'ho scrivo nel log
 							try {
 								if(currentDoc.getString("external_id")!=null)
 									url="https://twitter.com/statuses/"+currentDoc.getString("external_id");
 							} catch(JSONException e){
-								LOGGER.error("The JSONObject currentDoc dosen't contains the external_id...");
+								//LOGGER.debug("The JSONObject currentDoc dosen't contains the external_id...");
 							}
 
 							totalDocsPerTopic.add(currentDoc);
-							if(!ReportGeneration.retrievedDocuments.containsKey(currentDocUrl)){
+							if(!ReportGeneration.retrievedDocuments.containsKey(url)){
 								//System.out.println("Parsing document url = " + currentDocUrl);
 								JSONArray sources = currentDoc.getJSONArray("source_type");
 								int j = 0;
@@ -324,10 +327,10 @@ public class TWSearchAPI {
 										twitterDocumentsToEnrich = new HashMap<>();
 									}
 								} else {
-									ReportGeneration.retrievedDocuments.put(currentDocUrl, currentDoc);
+									ReportGeneration.retrievedDocuments.put(url, currentDoc);
 								}
 							} else {
-								JSONObject existingDoc = ReportGeneration.retrievedDocuments.get(currentDocUrl);
+								JSONObject existingDoc = ReportGeneration.retrievedDocuments.get(url);
 								// Manage multiple topics and tags for the same doc
 								TWJSONParser.managePossibleMultipleTopicsAndTagsOnSameDocument(existingDoc, currentDoc);
 
