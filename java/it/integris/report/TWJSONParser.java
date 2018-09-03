@@ -34,6 +34,7 @@ public class TWJSONParser {
 	public static void parseDocumentMetadata(String projectName, JSONObject doc, PrintWriter writer) throws UnsupportedEncodingException, JSONException{
 		if(doc.has("url")) 
 			writer.print(StringEscapeUtils.escapeCsv(doc.getString("url")) + SEPARATOR);
+//			writer.print(StringEscapeUtils.escapeCsv("https://twitter.com/statuses/") + SEPARATOR);
 		else
 			writer.print(SEPARATOR);
 
@@ -608,7 +609,7 @@ public class TWJSONParser {
 			existingDoc.put("tags_marking", mergedTagsMarking);
 		if(mergedTagsCustomer.length() > 0)
 			existingDoc.put("tags_customer", mergedTagsCustomer);
-		ReportGeneration.retrievedDocuments.put(currentDoc.getString("url"), existingDoc);
-
+//		ReportGeneration.retrievedDocuments.put(currentDoc.getString("url"), existingDoc);
+		ReportGeneration.retrievedDocuments.put("https://twitter.com/statuses/", existingDoc);
 	}
 }

@@ -89,10 +89,17 @@ public class TwitterAPI {
 				JSONObject currentTweet = twitterDocuments.get(lookupedTweet.getId());
 				URL aURL = null;
 				try {
-					aURL = new URL(currentTweet.getString("url"));
+					//********** INTERVENTO PER AGGIORNAMENTO POLICY TWITTER DEL 3/09/2018***********//
+
+//					aURL = new URL(currentTweet.getString("url"));
+//					currentTweet.put("root_url", "http://" + aURL.getHost() + "/" + aURL.getPath().split("[/]")[1] + "/");
+
+					aURL = new URL("https://twitter.com/statuses/");
 					currentTweet.put("root_url", "http://" + aURL.getHost() + "/" + aURL.getPath().split("[/]")[1] + "/");
 					currentTweet.put("host_url", "http://twitter.com/");
 					currentTweet.put("domain_url", "http://twitter.com/");
+					//********** FINE ***********//
+
 				} catch (MalformedURLException | JSONException e) {
 					e.printStackTrace();
 					continue;

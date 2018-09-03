@@ -50,10 +50,13 @@ public class TWSearchAPI {
 		if(enrichedDocuments == null)
 			return TWSearchAPI.RETURNCODE_ERR;
 		for(int i = 0; i < enrichedDocuments.size(); i++){
-			if(!ReportGeneration.retrievedDocuments.containsKey(enrichedDocuments.get(i).getString("url"))){
-				ReportGeneration.retrievedDocuments.put(enrichedDocuments.get(i).getString("url"), enrichedDocuments.get(i));
+/*			if(!ReportGeneration.retrievedDocuments.containsKey(enrichedDocuments.get(i).getString("url"))){
+				ReportGeneration.retrievedDocuments.put(enrichedDocuments.get(i).getString("url"), enrichedDocuments.get(i));*/
+			if(!ReportGeneration.retrievedDocuments.containsKey("https://twitter.com/statuses/")){
+				ReportGeneration.retrievedDocuments.put("https://twitter.com/statuses/", enrichedDocuments.get(i));
 			} else {
-				TWJSONParser.managePossibleMultipleTopicsAndTagsOnSameDocument(ReportGeneration.retrievedDocuments.get(enrichedDocuments.get(i).getString("url")), enrichedDocuments.get(i));
+//				TWJSONParser.managePossibleMultipleTopicsAndTagsOnSameDocument(ReportGeneration.retrievedDocuments.get(enrichedDocuments.get(i).getString("url")), enrichedDocuments.get(i));
+				TWJSONParser.managePossibleMultipleTopicsAndTagsOnSameDocument(ReportGeneration.retrievedDocuments.get("https://twitter.com/statuses/"), enrichedDocuments.get(i));
 			}
 		}
 		return TWSearchAPI.RETURNCODE_OK;
@@ -286,6 +289,8 @@ public class TWSearchAPI {
 					while(pagination){
 						for(int i = 0; i < listDocuments.length(); i++){
 							currentDoc=listDocuments.getJSONObject(i).getJSONObject("data");
+							
+
 							//********** INTERVENTO PER AGGIORNAMENTO POLICY TWITTER DEL 3/09/2018***********//
 							
 							//metto il contenuto dell' url presente nell'oggetto currentDoc JSON in una variabile String
@@ -295,6 +300,7 @@ public class TWSearchAPI {
 							try {
 								if(currentDoc.getString("external_id")!=null)
 									url="https://twitter.com/statuses/"+currentDoc.getString("external_id");
+								
 							} catch(JSONException e){
 								//LOGGER.debug("The JSONObject currentDoc dosen't contains the external_id...");
 							}
