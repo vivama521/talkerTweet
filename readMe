@@ -1,0 +1,6 @@
+Istruzioni di build:
+lanciare il comando maven install
+rinominare il file generato TalkWalkerReport-0.0.1-SNAPSHOT-jar-with-dependencies.jar in TalkWalkerReport.jar
+spostare il file TalkWalkerReport.jar nella directory /home/SS5806402/ della macchina: 172.31.55.32
+Il file è schedulato in crontab dell'utente SS5806402 ogni 5 giorni
+
